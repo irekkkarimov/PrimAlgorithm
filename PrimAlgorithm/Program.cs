@@ -1,4 +1,5 @@
-﻿namespace PrimAlgorithm;
+﻿using System;
+namespace PrimAlgorithm;
 using System.Diagnostics;
 
 public static class Program
@@ -18,7 +19,7 @@ public static class Program
         var singleUsedGraph = graph;
         PrimAlgorithm mstSingle = new PrimAlgorithm(singleUsedGraph);
         int[] parentSingle = mstSingle.PrimMST();
-        Console.WriteLine(mstSingle.Iterations / (double) 1000);
+        
         Console.WriteLine("Edge   Weight");
         for (int i = 1; i < mstSingle.V; i++)
         {
