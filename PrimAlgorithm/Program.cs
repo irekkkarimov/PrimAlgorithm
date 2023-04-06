@@ -5,7 +5,6 @@ public static class Program
 {
     public static void Main()
     {
-        
         int[][] graph =
         {
             new int[] { 0, 2, 0, 6, 0 },
@@ -14,37 +13,18 @@ public static class Program
             new int[] { 6, 8, 0, 0, 9 },
             new int[] { 0, 5, 7, 9, 0 }
         };
-
-        var stopWatch = new Stopwatch();
+        
         var arr = Initializer();
-        
-        // for (var i = 0; i < 50; i++)
-        // {
-        //     int[][] usedGraph;
-        //     usedGraph = ConvertToMatrix(arr[i]);;
-        //
-        //     PrimAlgorithm mst = new PrimAlgorithm(usedGraph);
-        //
-        //     stopWatch.Start();
-        //     int[] parent = mst.PrimMST();
-        //     stopWatch.Stop();
-        // }
-        
-        var singleUsedGraph = graph;;
-
+        var singleUsedGraph = graph;
         PrimAlgorithm mstSingle = new PrimAlgorithm(singleUsedGraph);
-
-        stopWatch.Start();
         int[] parentSingle = mstSingle.PrimMST();
-        stopWatch.Stop();
-
+        Console.WriteLine(mstSingle.Iterations / (double) 1000);
         Console.WriteLine("Edge   Weight");
         for (int i = 1; i < mstSingle.V; i++)
         {
-            Console.WriteLine(parentSingle[i] + " - " + i + "    " + singleUsedGraph[i][parentSingle[i]]);
+            Console.WriteLine((parentSingle[i] + 1) + " - " + (i + 1) + "    " + singleUsedGraph[i][parentSingle[i]]);
         }
         Console.WriteLine("------");
-        Console.WriteLine($"Time elapsed : {stopWatch.Elapsed.Milliseconds}");
     }
 
     public static string[] Initializer()
@@ -86,5 +66,51 @@ public static class Program
         }
 
         return matrix;
+    }
+    
+    public static void Benchmark()
+    {
+        int iterations = 50;
+        var stopWatch = new Stopwatch();
+        var times = new TimeSpan[iterations];
+        var arr = Initializer();
+        var singleUsedGraph = ConvertToMatrix(arr[19]);
+
+        PrimAlgorithm mstSingle = new PrimAlgorithm(singleUsedGraph);
+
+        for (var i = 0; i < iterations; i++)
+        {
+            stopWatch.Reset();
+            stopWatch.Start();
+            int[] parentSingle = mstSingle.PrimMST();
+            stopWatch.Stop();
+            times[i] = stopWatch.Elapsed;
+        }
+        
+        TimeSpan timer = new TimeSpan();
+        foreach (var time in times)
+        {
+            timer += time;
+        }
+        Console.WriteLine($"{ (double) timer.Milliseconds / iterations}");
+    }
+
+    public static void IterationsForAllGraphsInitializer()
+    {
+        var arr = Initializer();
+        for (var i = 0; i < arr.Length; i++)
+        {
+            var graph = ConvertToMatrix(arr[i]);
+            // Console.WriteLine($"{i + 1} graph - ");
+            IterationsForAllGraphs(graph);
+        }
+       
+
+    }
+    public static void IterationsForAllGraphs(int[][] matrix)
+    {
+        PrimAlgorithm mstSingle = new PrimAlgorithm(matrix);
+        int[] parentSingle = mstSingle.PrimMST();
+        Console.WriteLine(mstSingle.Iterations / (double) 1000);
     }
 }

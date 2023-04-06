@@ -6,6 +6,7 @@ public class PrimAlgorithm
 {
     public int V;  // Число вершин графа
     public int[][] graph;  // Матрица смежности для графа
+    public long Iterations { get; private set; } // Счетчик итераций
 
     public PrimAlgorithm(int[][] g) 
     {
@@ -17,8 +18,9 @@ public class PrimAlgorithm
     {
         int min = int.MaxValue, minIndex = -1;
 
-        for (int v = 0; v < V; v++)  
+        for (int v = 0; v < V; v++)
         {
+            Iterations++;
             if (!mstSet[v] && key[v] < min) 
             {
                 min = key[v];
@@ -47,16 +49,18 @@ public class PrimAlgorithm
 
         for (int count = 0; count < V - 1; count++) 
         {
-            int u = MinKey(key, mstSet);
+            var u = MinKey(key, mstSet);
 
             mstSet[u] = true;
 
-            for (int v = 0; v < V; v++) 
+            for (int v = 0; v < V; v++)
             {
+                Iterations++;
                 if (graph[u][v] != 0 && !mstSet[v] && graph[u][v] < key[v])
                 {
                     parent[v] = u;
                     key[v] = graph[u][v];
+                    
                 }
             }
         }
